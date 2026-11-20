@@ -114,8 +114,8 @@
       }
 
       buttons.forEach(button => button.addEventListener("click", () => setLanguage(button.dataset.language)));
-      let initialLanguage = "zh";
-      try { initialLanguage = localStorage.getItem("treasure-bay-language") || "zh"; } catch (_) { /* Use Chinese by default. */ }
+      let initialLanguage = "en";
+      try { initialLanguage = localStorage.getItem("treasure-bay-language") || "en"; } catch (_) { /* Use English by default. */ }
       setLanguage(initialLanguage);
     })();
   </script>
