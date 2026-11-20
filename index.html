@@ -13,12 +13,11 @@
     .language-switch {
       position: fixed;
       z-index: 2;
-      top: max(12px, env(safe-area-inset-top));
-      left: 50%;
-      transform: translateX(-50%);
+      top: max(8px, env(safe-area-inset-top));
+      left: max(8px, calc((100vw - 720px) / 2 + 10px));
       display: inline-flex;
-      gap: 3px;
-      padding: 4px;
+      gap: 1px;
+      padding: 2px;
       border: 1px solid rgb(255 255 255 / 68%);
       border-radius: 999px;
       background: rgb(255 255 255 / 92%);
@@ -26,14 +25,14 @@
       backdrop-filter: blur(8px);
     }
     .language-switch button {
-      min-width: 62px;
-      min-height: 34px;
-      padding: 6px 13px;
+      min-width: 48px;
+      min-height: 27px;
+      padding: 4px 9px;
       border: 0;
       border-radius: 999px;
       background: transparent;
       color: #17466a;
-      font: 700 14px/1 system-ui, sans-serif;
+      font: 700 12px/1 system-ui, sans-serif;
       cursor: pointer;
       transition: background-color .18s ease, color .18s ease;
     }
