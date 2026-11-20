@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#32add0">
+  <meta name="description" content="宝藏湾年度寻宝活动 — Treasure Bay Annual Treasure Hunt">
+  <title>宝藏湾年度寻宝 · Treasure Bay Treasure Hunt</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #292929; }
+    .language-switch {
+      position: fixed;
+      z-index: 2;
+      top: max(12px, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-flex;
+      gap: 3px;
+      padding: 4px;
+      border: 1px solid rgb(255 255 255 / 68%);
+      border-radius: 999px;
+      background: rgb(255 255 255 / 92%);
+      box-shadow: 0 3px 14px rgb(19 57 79 / 20%);
+      backdrop-filter: blur(8px);
+    }
+    .language-switch button {
+      min-width: 62px;
+      min-height: 34px;
+      padding: 6px 13px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: #17466a;
+      font: 700 14px/1 system-ui, sans-serif;
+      cursor: pointer;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    .language-switch button[aria-pressed="true"] { background: #176eb3; color: white; }
+    .language-switch button:focus-visible { outline: 3px solid #ffb443; outline-offset: 2px; }
+    main { min-height: 100vh; display: flex; justify-content: center; }
+    .poster {
+      position: relative;
+      width: min(100%, 720px);
+      height: auto;
+      aspect-ratio: 1080 / 2176;
+      overflow: hidden;
+      background: #32add0 url("images/bg.png") top center / 100% 100% no-repeat;
+    }
+    .poster img {
+      position: absolute;
+      display: block;
+      height: auto;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .poster-title { top: 6.4%; left: 50%; width: 41.4%; transform: translateX(-50%); }
+    .poster-prize { top: 67.8%; left: 2.3%; width: 43.7%; }
+    .poster-footer { top: 87.2%; left: 2.3%; width: 46.4%; }
+    .poster[data-language="en"] .poster-title { width: 81.3%; }
+    .poster[data-language="en"] .poster-footer { width: 76.9%; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <nav class="language-switch" aria-label="Language / 语言" role="group">
+    <button type="button" data-language="zh" aria-pressed="true" lang="zh-CN">中文</button>
+    <button type="button" data-language="en" aria-pressed="false" lang="en">English</button>
+  </nav>
+
+  <main>
+    <article class="poster" aria-label="宝藏湾年度寻宝活动海报">
+      <img class="poster-title" src="images/text_cn_00.png" alt="宝藏湾年度寻宝" draggable="false">
+      <img class="poster-prize" src="images/text_cn_01.png" alt="最终奖励：年度 VIP 会员卡" draggable="false">
+      <img class="poster-footer" src="images/text_cn_02.png" alt="主办方、奖品赞助及寻宝提示" draggable="false">
+    </article>
+  </main>
+
+  <script>
+    (() => {
+      const assets = {
+        zh: {
+          title: ["images/text_cn_00.png", "宝藏湾年度寻宝"],
+          prize: ["images/text_cn_01.png", "最终奖励：年度 VIP 会员卡"],
+          footer: ["images/text_cn_02.png", "主办方、奖品赞助及寻宝提示"],
+          pageLabel: "宝藏湾年度寻宝活动海报"
+        },
+        en: {
+          title: ["images/text_en_00.png", "The 66th Annual Treasure Hunt · Treasure Bay"],
+          prize: ["images/text_en_01.png", "Grand prize: Annual VIP member card"],
+          footer: ["images/text_en_02.png", "Organizers, prize sponsor and survival tip"],
+          pageLabel: "Treasure Bay annual treasure hunt poster"
+        }
+      };
+      const poster = document.querySelector(".poster");
+      const title = document.querySelector(".poster-title");
+      const prize = document.querySelector(".poster-prize");
+      const footer = document.querySelector(".poster-footer");
+      const buttons = [...document.querySelectorAll("[data-language]")];
+
+      function setLanguage(language) {
+        const selected = assets[language] ? language : "zh";
+        const copy = assets[selected];
+        poster.dataset.language = selected;
+        document.documentElement.lang = selected === "zh" ? "zh-CN" : "en";
+        poster.setAttribute("aria-label", copy.pageLabel);
+        for (const [image, key] of [[title, "title"], [prize, "prize"], [footer, "footer"]]) {
+          image.src = copy[key][0];
+          image.alt = copy[key][1];
+        }
+        buttons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.language === selected)));
+        try { localStorage.setItem("treasure-bay-language", selected); } catch (_) { /* Storage can be unavailable for local files. */ }
+      }
+
+      buttons.forEach(button => button.addEventListener("click", () => setLanguage(button.dataset.language)));
+      let initialLanguage = "zh";
+      try { initialLanguage = localStorage.getItem("treasure-bay-language") || "zh"; } catch (_) { /* Use Chinese by default. */ }
+      setLanguage(initialLanguage);
+    })();
+  </script>
+</body>
+</html>
